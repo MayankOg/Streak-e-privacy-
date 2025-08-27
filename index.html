@@ -24,7 +24,7 @@
       max-width: 800px;
       margin: auto;
     }
-    h1, h2 {
+    h1, h2, h3 {
       color: #6a1b9a;
     }
     section {
@@ -36,6 +36,111 @@
       background: #f1f1f1;
       font-size: 0.9em;
       color: #666;
+    }
+    
+    /* Form Styles */
+    .form-container {
+      background: white;
+      border: 2px solid #6a1b9a;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 10px rgba(106, 27, 154, 0.1);
+    }
+    
+    .form-container h3 {
+      margin-top: 0;
+      color: #6a1b9a;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    input[type="text"], 
+    input[type="email"], 
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    
+    .form-button {
+      background: #6a1b9a;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    .form-button:hover {
+      background: #4a148c;
+    }
+    
+    .form-note {
+      background: #e8f5e8;
+      border-left: 4px solid #4caf50;
+      padding: 10px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .warning-note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .form-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #6a1b9a;
+    }
+    
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #6a1b9a;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab-button.active {
+      background: #6a1b9a;
+      color: white;
+      border-bottom-color: #6a1b9a;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
     }
   </style>
 </head>
@@ -83,31 +188,235 @@
         <li>Access and update personal info in the app</li>
         <li>Delete your account at any time</li>
         <li>Manage permissions (camera, location) in device settings</li>
+        <li>Request deletion of specific data</li>
       </ul>
     </section>
 
+    <!-- Data Deletion Request Forms -->
     <section>
-      <h2>7. Children’s Privacy</h2>
+      <h2>7. Account & Data Deletion Requests</h2>
+      <p>You can request account deletion or specific data deletion using the forms below. We will process your request within 30 days.</p>
+      
+      <div class="form-container">
+        <div class="form-tabs">
+          <button class="tab-button active" onclick="showTab('account-deletion')">Delete Account</button>
+          <button class="tab-button" onclick="showTab('data-deletion')">Delete Specific Data</button>
+        </div>
+        
+        <!-- Account Deletion Form -->
+        <div id="account-deletion" class="tab-content active">
+          <h3>Account Deletion Request</h3>
+          <div class="warning-note">
+            <strong>Warning:</strong> This will permanently delete your account and all associated data including streaks, photos, and progress. This action cannot be undone.
+          </div>
+          
+          <form id="accountDeletionForm">
+            <div class="form-group">
+              <label for="delete-email">Email Address (associated with your account):</label>
+              <input type="email" id="delete-email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="delete-phone">Phone Number (associated with your account):</label>
+              <input type="text" id="delete-phone" name="phone" placeholder="+1234567890">
+            </div>
+            
+            <div class="form-group">
+              <label for="delete-reason">Reason for deletion (optional):</label>
+              <select id="delete-reason" name="reason">
+                <option value="">Select a reason</option>
+                <option value="privacy-concerns">Privacy concerns</option>
+                <option value="no-longer-using">No longer using the app</option>
+                <option value="found-alternative">Found alternative service</option>
+                <option value="technical-issues">Technical issues</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="delete-comments">Additional comments (optional):</label>
+              <textarea id="delete-comments" name="comments" placeholder="Please provide any additional details..."></textarea>
+            </div>
+            
+            <button type="submit" class="form-button">Submit Account Deletion Request</button>
+          </form>
+        </div>
+        
+        <!-- Data Deletion Form -->
+        <div id="data-deletion" class="tab-content">
+          <h3>Specific Data Deletion Request</h3>
+          <div class="form-note">
+            Use this form to request deletion of specific types of data while keeping your account active.
+          </div>
+          
+          <form id="dataDeletionForm">
+            <div class="form-group">
+              <label for="data-email">Email Address (associated with your account):</label>
+              <input type="email" id="data-email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="data-phone">Phone Number (associated with your account):</label>
+              <input type="text" id="data-phone" name="phone" placeholder="+1234567890">
+            </div>
+            
+            <div class="form-group">
+              <label>Select data to delete:</label>
+              <div style="margin-top: 10px;">
+                <label style="font-weight: normal; margin-bottom: 10px; display: flex; align-items: center;">
+                  <input type="checkbox" name="dataTypes" value="photos" style="width: auto; margin-right: 8px;">
+                  Photos and media files
+                </label>
+                <label style="font-weight: normal; margin-bottom: 10px; display: flex; align-items: center;">
+                  <input type="checkbox" name="dataTypes" value="location" style="width: auto; margin-right: 8px;">
+                  Location data
+                </label>
+                <label style="font-weight: normal; margin-bottom: 10px; display: flex; align-items: center;">
+                  <input type="checkbox" name="dataTypes" value="usage" style="width: auto; margin-right: 8px;">
+                  Usage analytics
+                </label>
+                <label style="font-weight: normal; margin-bottom: 10px; display: flex; align-items: center;">
+                  <input type="checkbox" name="dataTypes" value="streaks" style="width: auto; margin-right: 8px;">
+                  Streak history
+                </label>
+                <label style="font-weight: normal; margin-bottom: 10px; display: flex; align-items: center;">
+                  <input type="checkbox" name="dataTypes" value="device" style="width: auto; margin-right: 8px;">
+                  Device information
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="data-comments">Reason for request (optional):</label>
+              <textarea id="data-comments" name="comments" placeholder="Please explain why you want this specific data deleted..."></textarea>
+            </div>
+            
+            <button type="submit" class="form-button">Submit Data Deletion Request</button>
+          </form>
+        </div>
+        
+        <div class="form-note">
+          <strong>Processing Time:</strong> We will acknowledge your request within 3 business days and complete the deletion within 30 days. You will receive a confirmation email once the process is complete.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>8. Children's Privacy</h2>
       <p>Streak-E is not intended for users under 13. We do not knowingly collect data from children.</p>
     </section>
 
     <section>
-      <h2>8. International Users</h2>
+      <h2>9. International Users</h2>
       <p>Your data may be stored in India or other regions. By using Streak-E, you consent to these transfers.</p>
     </section>
 
     <section>
-      <h2>9. Changes to This Policy</h2>
+      <h2>10. Changes to This Policy</h2>
       <p>We may update this policy. Major updates will be communicated within the app or by other means.</p>
     </section>
 
     <section>
-      <h2>10. Contact Us</h2>
-      <p>If you have questions, contact us at: <strong>streake16@gmail.com</strong></p>
+      <h2>11. Contact Us</h2>
+      <p>If you have questions about this privacy policy or need assistance with deletion requests, contact us at: <strong>streake16@gmail.com</strong></p>
+      <p>For urgent privacy concerns, please include "PRIVACY REQUEST" in your email subject line.</p>
     </section>
   </main>
   <footer>
     &copy; 2025 Streak-E. All rights reserved.
   </footer>
+
+  <script>
+    // Tab functionality
+    function showTab(tabName) {
+      // Hide all tab contents
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active class from all buttons
+      const tabButtons = document.querySelectorAll('.tab-button');
+      tabButtons.forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Form submission handlers
+    document.getElementById('accountDeletionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const reason = formData.get('reason');
+      const comments = formData.get('comments');
+      
+      // Create email content
+      const subject = encodeURIComponent('Account Deletion Request - Streak-E');
+      const body = encodeURIComponent(`
+Request Type: Account Deletion
+
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+Reason: ${reason || 'Not specified'}
+Additional Comments: ${comments || 'None'}
+
+Please confirm receipt of this request and provide an estimated completion date.
+
+Thank you.
+      `);
+      
+      // Open email client
+      window.location.href = `mailto:streake16@gmail.com?subject=${subject}&body=${body}`;
+      
+      alert('Your deletion request has been prepared. Please send the email to complete your request.');
+    });
+
+    document.getElementById('dataDeletionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const comments = formData.get('comments');
+      
+      // Get selected data types
+      const dataTypes = [];
+      const checkboxes = document.querySelectorAll('input[name="dataTypes"]:checked');
+      checkboxes.forEach(checkbox => {
+        dataTypes.push(checkbox.value);
+      });
+      
+      if (dataTypes.length === 0) {
+        alert('Please select at least one type of data to delete.');
+        return;
+      }
+      
+      // Create email content
+      const subject = encodeURIComponent('Data Deletion Request - Streak-E');
+      const body = encodeURIComponent(`
+Request Type: Specific Data Deletion
+
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+Data Types to Delete: ${dataTypes.join(', ')}
+Reason: ${comments || 'Not provided'}
+
+Please confirm receipt of this request and provide an estimated completion date.
+
+Thank you.
+      `);
+      
+      // Open email client
+      window.location.href = `mailto:streake16@gmail.com?subject=${subject}&body=${body}`;
+      
+      alert('Your data deletion request has been prepared. Please send the email to complete your request.');
+    });
+  </script>
 </body>
 </html>
